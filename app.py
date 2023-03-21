@@ -42,8 +42,8 @@ def files():
             if ext == query:
                 # Удалаяем файл с несоответсвующим расшинеринием
                 files_list_filter.append(file)
-                # Возвращаем словарь
-                return {'files': files_list_filter}
+            # Возвращаем словарь
+            return {'files': files_list_filter}
 
     # Возвращаем словарь
     return {'files': files_list}
