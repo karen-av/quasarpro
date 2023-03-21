@@ -1,11 +1,14 @@
-from flask import Flask, redirect, render_template, flash, request, send_from_directory
+from flask import Flask, render_template, request, \
+    send_from_directory, send_file
 from config import Config
 from pathlib import Path
 import requests
 from werkzeug.utils import secure_filename
+from werkzeug.security import safe_join 
 import os
 from functions import get_list_files, allowed_file
 from constants import ALLOWED_EXTENSIONS
+import filecmp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -58,18 +61,35 @@ def upload_file():
 
         # Если файл не загружен
         if file.filename == '':
-            return 'No selected file'
-        
+            return 'Нет файла'
+
         # Безопасное сохраниение имени файла
         filename = secure_filename(file.filename)
 
-        #Проверяем допустимо ли расширение загружаемого файла и проверяем на наличие дубликатов
-        if allowed_file(filename) and filename not in get_list_files(UPLOAD_FOLDER):
-            # Сохранение файла в директорию
-            file.save(os.path.join(UPLOAD_FOLDER, filename))
-            return 'Файл успешно загружен и сохранен!'
 
-        return "Недопустимый формат файла или файл c таким именем загружен"
+        # Список ранее загруженных файлов
+        files_list = get_list_files(UPLOAD_FOLDER)
+
+        # Проверяем на наличие дубликатов
+        if filename in files_list:
+            return "Файл с таким именем уже существует."
+        
+        #Проверяем допустимо ли расширение загружаемого файла
+        if allowed_file(filename) is False:
+            return "Недопустимый формат файла."
+
+        # Сохранение файла в директорию
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+        # https://docs.python.org/3/library/filecmp.html
+        # Сравнивает содержимое с существующими файлами 
+        for file in files_list:
+            # Безопасное соединение базовый каталог и имя файла
+            if filecmp.cmp(safe_join(UPLOAD_FOLDER, file), safe_join(UPLOAD_FOLDER, filename), shallow=False):
+                os.remove(safe_join(UPLOAD_FOLDER, filename))
+                return (f"Файл с таким содержимым был загруже ранее. Имя файла {file}")
+                
+        return 'Файл успешно загружен и сохранен!'
 
 
 # Удаляем файл 
@@ -81,22 +101,35 @@ def delete_file():
 
         # Если файл существует, то удаляем его
         if filename in get_list_files(UPLOAD_FOLDER):
-            os.remove(f'{UPLOAD_FOLDER}/{filename}')
+            # Безопасное соединение базовый каталог и имя файла
+            safe_path = safe_join(UPLOAD_FOLDER, filename)
+            os.remove(safe_path)
             return "Файл удален."
         
         return 'Файл не найден.'
 
 
-# Поиск
+# Поиск и отправка файла 
 @app.route('/files/get/search', methods=['GET'])
 def search():
     filename = request.args.get('q')
-    # Если файл существует, то возвращаем его его
-    if filename in get_list_files(UPLOAD_FOLDER):
-        return send_from_directory(UPLOAD_FOLDER, filename)
-    return "Файл не найден"
+
+    # Безопасное соединение базовый каталог и имя файла
+    #https://werkzeug.palletsprojects.com/en/2.2.x/utils/#werkzeug.security.safe_join
+    safe_path = safe_join(UPLOAD_FOLDER, filename)
+
+    try:
+        # https://flask.palletsprojects.com/en/2.2.x/api/
+        return send_file(safe_path, as_attachment=True)
+    except:
+        return "Файл не найден"
 
 
 if __name__ == ('__main__'):
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5000)
 
+
+
+# Если файл существует, то возвращаем его его
+    #if filename in get_list_files(UPLOAD_FOLDER):
+    #return send_from_directory(UPLOAD_FOLDER, filename)
