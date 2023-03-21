@@ -1,0 +1,1 @@
+ALLOWED_EXTENSIONS = {'xlsx', 'xls', 'txt', 'csv', 'json', 'xlsx', 'png', 'jpg', 'py'}

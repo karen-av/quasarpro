@@ -6,6 +6,6 @@ experiment.py
 __pycache__
 responses
 files
-download_folder
-responses_files
+uploads
+responses
 .pytest_cache

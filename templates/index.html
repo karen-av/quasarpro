@@ -10,18 +10,23 @@
     <style>
         .form{
         margin-top: 15px;
+        margin-bottom: 15px;
         }
     </style>
 </head>
 
 <body>
     <h2>Files</h2>
+
+ <!---
     <div class="form">
         <form action="/files/get" method="get">
         <input name="extantion" value="all" type="hidden">
         <button type="submit">Список всех файлов</button>
     </form>
     </div>
+-->   
+    <h6>Введите тип файла, чтобы увидеть все загруженные файлы такого типа <br>или оставьте поле пустим, чтобы увидеть все загруженные файлы</h6>
 
     <div class="form">
         <form action="/files/get" method="get">
@@ -29,6 +34,18 @@
         <button type="submit">Поиск</button>
     </form>
     </div>
+    
+    <h6>Загрузите excel файл со списком сотрудников.</h6>
+    <div>
+        <form action="/files/create/" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <input type="submit" value="Отправить">
+        </form>
+        
+    </div>
+    
+   
+    </form>
 </body>
 
 
