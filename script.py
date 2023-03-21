@@ -1,14 +1,32 @@
 import requests
 import json
 from pathlib import Path
+from functions import requests_get_function
 
-# Путить к директории для хранения полученных json файлов
-DATA_DIR = Path.cwd()/"responses" 
+
+# Директория для хранения полученных json файлов
+DATA_DIR = Path.cwd()/"responses_files" 
 DATA_DIR.mkdir(exist_ok=True)
 FILE_NAME = 'response.json'
 
 
-response = requests.get('http://127.0.0.1:5000/files/get/list').json()
-with open(DATA_DIR / FILE_NAME, 'w') as file:
-        json.dump(response, file, indent=4, ensure_ascii=False)  
-print(response)
+while True:
+    input_comand = input('Нажмите Enter, чтобы увидеть все файл или введите тип файла: ')
+    params = {
+         'extantion': 'all'
+         }
+    
+    if len(input_comand) != 0:
+        params['extantion'] = input_comand
+
+    # GET запрос
+    response = requests_get_function(params)
+    with open(DATA_DIR / FILE_NAME, 'w') as file:
+            json.dump(response, file, indent=4, ensure_ascii=False)  
+    
+    print(response)
+    print(f'Список файлов сохранен в {DATA_DIR}/{FILE_NAME}')
+
+
+
+    

@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, flash
+from flask import Flask, redirect, render_template, flash, request
 from config import Config
 from pathlib import Path
 import requests
@@ -6,12 +6,9 @@ import requests
 app = Flask(__name__)
 app.config.from_object(Config)
 
-DATA_DIR = Path.cwd()/"files" 
+# Директория для сохранения загруженных файлов
+DATA_DIR = Path.cwd()/"download_folder" 
 DATA_DIR.mkdir(exist_ok=True)
-
-# Для отображени в виде HTML установить True
-# Для работы scriot.py установите False
-WEB_SITE_MODE = False
 
 
 # Главная
@@ -21,17 +18,31 @@ def index():
 
 
 # Список всех загруженных файлов
-@app.route('/files/get/list')
+@app.route('/files/get', methods=['GET'])
 def files():
+    # Список для сохранения названий файлов
     files_list = []
-    # https://docs.python.org/3/library/pathlib.html#Path.rglob
-    for x in Path(DATA_DIR).iterdir(): 
-        files_list.append(x.name)
-    dict_files = {}
-    dict_files['files'] = files_list
-    if WEB_SITE_MODE:
-        return render_template('index.html', files_list=files_list)
-    return dict_files
+    
+    # тип файла из get запроса
+    query = request.args.get('extantion')
+    
+    if query == 'all' or query == '':
+        # https://docs.python.org/3/library/pathlib.html#Path.rglob
+        for x in Path(DATA_DIR).iterdir(): 
+            files_list.append(x.name)
+
+    else:
+        for x in Path(DATA_DIR).iterdir(): 
+            # Получаем расширение файла через поиск индекса точки и среза
+            if x.name[x.name.find(".") + 1:] == query:
+                files_list.append(x.name)
+
+    # Словарь для возарвта json
+    
+    return {'files': files_list}
+
+
+
 
 
 if __name__ == ('__main__'):

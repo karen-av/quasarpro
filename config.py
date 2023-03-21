@@ -1,6 +1,6 @@
 class Config(object):
     DEBAG = False
-    TESTING = False
+    TESTING = True
     TEMPLATES_AUTO_RELOAD = True
     SECRET_KEY = 'qgERT65=d'
     SESSION_PERMANENT = False
