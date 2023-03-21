@@ -1,12 +1,12 @@
 import json
 import requests
 from pathlib import Path
-from constants import ALLOWED_EXTENSIONS
+from constants import ALLOWED_EXTENSIONS, HTTP
 
 
 # Запрос get к серверу 
 def requests_get_function(params):
-    return requests.get(f'http://127.0.0.1:5000/files/get', params = params).json()
+    return requests.get(f'{HTTP}files/get', params = params).json()
 
 
 # Список всех сохраненных файлов

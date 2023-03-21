@@ -72,6 +72,22 @@ def upload_file():
         return "Недопустимый формат файла или файл c таким именем загружен"
 
 
+# Удаляем файл 
+@app.route('/files/delete/', methods=['POST'])
+def delete_file():
+    if request.method == 'POST':
+        #Принимаем имя файл 
+        filename = request.form.get('filename')
+        print(filename)
+        # Если файл существует, то удаляем его
+        if filename in get_list_files(DATA_DIR):
+            os.remove(f'{DATA_DIR}/{filename}')
+            return "Файл удален."
+        
+        return 'Файл не найден.'
+
+
+
 if __name__ == ('__main__'):
     app.run(debug=True, host='0.0.0.0', port=5000)
 
