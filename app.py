@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, flash, request
+from flask import Flask, redirect, render_template, flash, request, send_from_directory
 from config import Config
 from pathlib import Path
 import requests
@@ -11,8 +11,8 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 # Директория для сохранения загруженных файлов
-DATA_DIR = Path.cwd()/"uploads" 
-DATA_DIR.mkdir(exist_ok=True)
+UPLOAD_FOLDER = Path.cwd()/"uploads" 
+UPLOAD_FOLDER.mkdir(exist_ok=True)
 
 
 # Главная
@@ -31,7 +31,7 @@ def files():
     query = request.args.get('extantion')
     
     # Функция вернет список всех загруженных файлов
-    files_list = get_list_files(DATA_DIR)
+    files_list = get_list_files(UPLOAD_FOLDER)
     
     # Если есть запрос на конкретное расширение файла 
     if query != '':
@@ -42,8 +42,8 @@ def files():
             if ext == query:
                 # Удалаяем файл с несоответсвующим расшинеринием
                 files_list_filter.append(file)
-            # Возвращаем словарь
-            return {'files': files_list_filter}
+        # Возвращаем словарь
+        return {'files': files_list_filter}
 
     # Возвращаем словарь
     return {'files': files_list}
@@ -64,9 +64,9 @@ def upload_file():
         filename = secure_filename(file.filename)
 
         #Проверяем допустимо ли расширение загружаемого файла и проверяем на наличие дубликатов
-        if allowed_file(filename) and filename not in get_list_files(DATA_DIR):
+        if allowed_file(filename) and filename not in get_list_files(UPLOAD_FOLDER):
             # Сохранение файла в директорию
-            file.save(os.path.join(DATA_DIR, filename))
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
             return 'Файл успешно загружен и сохранен!'
 
         return "Недопустимый формат файла или файл c таким именем загружен"
@@ -78,14 +78,23 @@ def delete_file():
     if request.method == 'POST':
         #Принимаем имя файл 
         filename = request.form.get('filename')
-        print(filename)
+
         # Если файл существует, то удаляем его
-        if filename in get_list_files(DATA_DIR):
-            os.remove(f'{DATA_DIR}/{filename}')
+        if filename in get_list_files(UPLOAD_FOLDER):
+            os.remove(f'{UPLOAD_FOLDER}/{filename}')
             return "Файл удален."
         
         return 'Файл не найден.'
 
+
+# Поиск
+@app.route('/files/get/search', methods=['GET'])
+def search():
+    filename = request.args.get('q')
+    # Если файл существует, то возвращаем его его
+    if filename in get_list_files(UPLOAD_FOLDER):
+        return send_from_directory(UPLOAD_FOLDER, filename)
+    return "Файл не найден"
 
 
 if __name__ == ('__main__'):

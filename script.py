@@ -6,8 +6,8 @@ from constants import ALLOWED_EXTENSIONS, HTTP
 
 
 # Директория для хранения полученных json файлов
-DATA_DIR = Path.cwd()/"responses" 
-DATA_DIR.mkdir(exist_ok=True)
+RSESPONSES_DIR = Path.cwd()/"responses" 
+RSESPONSES_DIR.mkdir(exist_ok=True)
 FILE_NAME = 'response.json'
 
 
@@ -16,7 +16,8 @@ while True:
         'Нажмите Enter, чтобы увидеть все файл.\
         \nВедите тип файла, чтобы получит список всех загруженных файлов такого типа.\
         \nЕсли нужно загрузить файл, то введите up.\
-        \nЧтобы удалить файл введите команду del\
+        \nЧтобы удалить файл введите команду del.\
+        \nЧто бы найти файл введите команду ser.\
         \nКоманда: '
         )
     
@@ -28,14 +29,14 @@ while True:
 
         # GET запрос
         response = requests_get_function(params)
-        with open(DATA_DIR / FILE_NAME, 'w') as file:
+        with open(RSESPONSES_DIR / FILE_NAME, 'w') as file:
                 json.dump(response, file, indent=4, ensure_ascii=False)  
 
         print(f'Ответ сервера: {response}')
-        print(f'Список файлов сохранен в {DATA_DIR}/{FILE_NAME}\n')
+        print(f'Список файлов сохранен в {RSESPONSES_DIR}/{FILE_NAME}\n')
 
     # Загрузить файл
-    elif input_comand.upper() == 'UP':
+    elif input_comand.lower() == 'up':
 
         file_input = input('Укажите путь к файлу: ')        
         #открываем файл
@@ -51,7 +52,7 @@ while True:
              print(f'[INFO] Exeptions while worcing with open:', _ex)
 
     # Удалить файл
-    elif input_comand.upper() == 'DEL':
+    elif input_comand.lower() == 'del':
         file_input = input('Введите имя файла, который хотите удалить: ')
         data = {
          'filename': file_input
@@ -60,4 +61,10 @@ while True:
         print(f'Ответ сервер: {response.text}\n')
 
 
-    
+    elif input_comand.lower() == 'ser':
+        file_input = input('Введите имя файла, который хотите найти: ')
+        params = {
+         'q': file_input
+         }
+        response = requests.get(f'{HTTP}files/get/search', params=params)
+        print(f'Ответ сервера: \n{response.text}\n')

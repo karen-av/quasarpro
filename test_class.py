@@ -2,7 +2,7 @@
 """https://pytest-docs-ru.readthedocs.io/ru/latest/getting-started.html#installation"""
 
 from functions import requests_get_function, get_list_files, allowed_file
-from app import DATA_DIR
+from app import UPLOAD_FOLDER
 from constants import ALLOWED_EXTENSIONS
 
 
@@ -17,7 +17,7 @@ class TestClass:
 
     # Функция должна возвращать сисок
     def test_get_list_files(self):
-        assert type(get_list_files(DATA_DIR)) == type(list())
+        assert type(get_list_files(UPLOAD_FOLDER)) == type(list())
 
     
     # Расширение файла должно быть из списка разрешенных
