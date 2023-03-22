@@ -31,21 +31,37 @@ class TestClass:
         assert response.status_code == 405
 
 
-    # Проверка пути files/get 
-    def test_route_files(self):
-        params = {
-         'extantion': ''
-         }
-        response = requests.get(f'{HTTP}files/get', params = params)
+    # Проверка пути files/get/list
+    def test_route_files_list(self):
+        response = requests.get(f'{HTTP}files/get/list')
         assert response.status_code == 200
 
-        # Ожидаем получить dict
-        response = requests.get(f'{HTTP}files/get', params = params).json()
+        # 405 Method Not Allowed
+        response = requests.post(f'{HTTP}files/get/list')
+        assert response.status_code == 405
+
+
+    # Проверка пути /files/get/{extantion}
+    def test_route_files(self):
+        response = requests.get(f'{HTTP}files/get/txt')
+        assert response.status_code == 200
+        
+        # 405 Method Not Allowed
+        response = requests.post(f'{HTTP}files/get/txt')
+        assert response.status_code == 405
+
+         # Ожидаем получить dict
+        response = requests.get(f'{HTTP}files/get/txt').json()
         assert type(response) == type({})
         
         # 404 Not Found 
         response = requests.post(f'{HTTP}files/get')
         assert response.status_code == 404
+
+        # 404 Not Found 
+        response = requests.get(f'{HTTP}files/get')
+        assert response.status_code == 404
+    
 
     # Проверка пути /files/create/
     def test_route_upload_file(self):
@@ -60,26 +76,27 @@ class TestClass:
         assert response.status_code == 405
 
 
-    # Проверка пути files/delete
+    # Проверка пути files/delete 
     def test_route_delete(self):
-        data = {
-         'filename': ""
-         }
-        response = requests.post(f'{HTTP}files/delete/', data=data)
+        response = requests.post(f'{HTTP}files/delete/txt')
         assert response.status_code == 200
 
-        # 405 Method Not Allowed
-        response = requests.get(f'{HTTP}files/delete/', data=data)
-        assert response.status_code == 405
+        # 404 Not Found 
+        response = requests.post(f'{HTTP}files/delete/')
+        assert response.status_code == 404
+
+        # 404 Not Found 
+        response = requests.get(f'{HTTP}files/delete/')
+        assert response.status_code == 404
 
     
     # Проверка пути /files/get/search
     def test_route_search(self):
-        response = requests.get(f'{HTTP}')
+        response = requests.get(f'{HTTP}/files/get/txt/filename')
         assert response.status_code == 200
 
         # 405 Method Not Allowed
-        response = requests.post(f'{HTTP}/files/get/search')
+        response = requests.post(f'{HTTP}/files/get/txt/filename')
         assert response.status_code == 405
 
 

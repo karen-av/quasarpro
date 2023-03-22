@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, jsonify
+from flask import Flask, render_template, request, send_file, jsonify, send_from_directory
 from config import Config
 from pathlib import Path
 from werkzeug.utils import secure_filename
@@ -23,40 +23,47 @@ def index():
     return render_template('index.html')
 
 
-# Список всех загруженных файлов
-@app.route('/files/get/', methods=['GET'])
-def files():
-    # Список для сохранения названий файлов
-    files_list = []
-    
+# Список всех доступных файлов
+@app.route('/files/get/list', methods=['GET'])
+def files_all():
+    # Функция вернет список всех загруженных файлов
+    files_list = get_list_files(UPLOAD_FOLDER)
+
+    # Возвращаем json
+    return jsonify({'files': files_list})
+
+
+# Возвращает список файлов с указанным расширением
+@app.route('/files/get/<extantion>')
+def files_1(extantion):
     # тип файла из get запроса
-    query = request.args.get('extantion')
+    query = extantion
     
     # Функция вернет список всех загруженных файлов
     files_list = get_list_files(UPLOAD_FOLDER)
     
-    # Если есть запрос на конкретное расширение файла 
-    if query != '':
-        files_list_filter = []
-        for file in files_list: 
-            # Получаем расширение файла через поиск индекса последнего входжения элемента и среза
-            ext = file[file.rfind('.') + 1:]
-            if ext == query:
-                # Удалаяем файл с несоответсвующим расшинеринием
-                files_list_filter.append(file)
-        # Возвращаем словарь
-        return jsonify({'files': files_list_filter})
+    # Итоговый список
+    files_list_filter = []
 
-    # Возвращаем словарь
-    return jsonify({'files': files_list})
+    # Ищем все файлы нужного расширения
+    for file in files_list: 
+        # Получаем расширение файла через поиск индекса последнего входжения элемента и среза
+        ext = file[file.rfind('.') + 1:]
+        if ext == query:
+            # Удалаяем файл с несоответсвующим расшинеринием
+            files_list_filter.append(file)
+
+    # Возвращаем json
+    return jsonify({'files': files_list_filter})
 
 
-# Принимаем файл 
+# Принимает загрузку файла и сохраняет его на сервере, проверяя на наличие дубликатов.
 @app.route('/files/create/', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
         #Принимаем файл из запроса
         file = request.files['file']
+        print(file)
 
         # Если файл не загружен
         if file.filename == '':
@@ -64,7 +71,6 @@ def upload_file():
 
         # Безопасное сохраниение имени файла
         filename = secure_filename(file.filename)
-
 
         # Список ранее загруженных файлов
         files_list = get_list_files(UPLOAD_FOLDER)
@@ -91,12 +97,10 @@ def upload_file():
         return 'Файл успешно загружен и сохранен!'
 
 
-# Удаляем файл 
-@app.route('/files/delete/', methods=['POST'])
-def delete_file():
+# Удаляет указанный файл с сервера.
+@app.route('/files/delete/<filename>', methods=['POST'])
+def delete_file(filename):
     if request.method == 'POST':
-        #Принимаем имя файл 
-        filename = request.form.get('filename')
 
         # Если файл существует, то удаляем его
         if filename in get_list_files(UPLOAD_FOLDER):
@@ -108,10 +112,10 @@ def delete_file():
         return 'Файл не найден.'
 
 
-# Поиск и отправка файла 
-@app.route('/files/get/search', methods=['GET'])
-def search():
-    filename = request.args.get('q')
+# Возвращает выбранный файл.
+@app.route('/files/get/<extantion>/<file_name>', methods=['GET'])
+def search(extantion, file_name):
+    filename = file_name + '.' + extantion
 
     # Безопасное соединение базовый каталог и имя файла
     #https://werkzeug.palletsprojects.com/en/2.2.x/utils/#werkzeug.security.safe_join

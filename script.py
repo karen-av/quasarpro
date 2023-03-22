@@ -2,7 +2,7 @@ import requests
 import json
 from pathlib import Path
 from constants import ALLOWED_EXTENSIONS, HTTP
-
+from pprint import pprint
 
 # Директория для хранения полученных ответов от сервера
 RSESPONSES_DIR = Path.cwd()/"responses" 
@@ -23,18 +23,25 @@ while True:
         \nКоманда: '
         )
     
-    # Если запрос на список файлов
-    if input_comand in ALLOWED_EXTENSIONS or input_comand == '':
-        params = {
-         'extantion': input_comand
-         }
-
-        # GET запрос параметром передаем input c расширением файла
-        response = requests.get(f'{HTTP}files/get', params = params).json()
+    # Запрос всех доступных файлов
+    if  input_comand == '':    
+        response = requests.get(f'{HTTP}files/get/list').json()
         with open(RSESPONSES_DIR / FILE_NAME, 'w') as file:
                 json.dump(response, file, indent=4, ensure_ascii=False)  
 
-        print(f'Ответ сервера: {response}')
+        print(f'Ответ сервера: ')
+        pprint(response, width=10)
+        print(f'Список файлов сохранен в {RSESPONSES_DIR}/{FILE_NAME}\n')
+    
+    # Если запрос на список файлов c конеретным расширением
+    elif input_comand in ALLOWED_EXTENSIONS:
+        # В запросе передаемрасширение файла
+        response = requests.get(f'{HTTP}files/get/{input_comand}').json()
+        with open(RSESPONSES_DIR / FILE_NAME, 'w') as file:
+                json.dump(response, file, indent=4, ensure_ascii=False)  
+
+        print(f'Ответ сервера: ')
+        pprint(response, width=10)
         print(f'Список файлов сохранен в {RSESPONSES_DIR}/{FILE_NAME}\n')
 
     # Загрузить файл
@@ -57,19 +64,16 @@ while True:
     # Удалить файл
     elif input_comand.lower() == 'del':
         file_input = input('Введите имя файла, который хотите удалить: ')
-        data = {
-         'filename': file_input
-         }
-        response = requests.post(f'{HTTP}files/delete/', data=data)
+        # В запросе передаем расширение и имя файла
+        response = requests.post(f'{HTTP}files/delete/{file_input}')
         print(f'Ответ сервер: {response.text}\n')
 
     # Поиск файла
     elif input_comand.lower() == 'src':
         file_input = input('Введите имя файла, который хотите найти: ')
-        params = {
-         'q': file_input
-         }
-        response = requests.get(f'{HTTP}files/get/search', params=params)
+        file_name = file_input.rsplit(".")[0]
+        extantion = file_input.rsplit(".")[1]
+        response = requests.get(f'{HTTP}files/get/{extantion}/{file_name}')
         with open(f'{RSESPONSES_DIR}/{SERCH_FILE_NAME}', 'w') as file:
             file.write(response.text)
         
