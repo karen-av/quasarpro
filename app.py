@@ -1,14 +1,13 @@
-from flask import Flask, render_template, request, \
-    send_from_directory, send_file
+from flask import Flask, render_template, request, send_file, jsonify
 from config import Config
 from pathlib import Path
-import requests
 from werkzeug.utils import secure_filename
 from werkzeug.security import safe_join 
 import os
 from functions import get_list_files, allowed_file
-from constants import ALLOWED_EXTENSIONS
+from constants import ALLOWED_EXTENSIONS, PORT
 import filecmp
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -46,10 +45,10 @@ def files():
                 # Удалаяем файл с несоответсвующим расшинеринием
                 files_list_filter.append(file)
         # Возвращаем словарь
-        return {'files': files_list_filter}
+        return jsonify({'files': files_list_filter})
 
     # Возвращаем словарь
-    return {'files': files_list}
+    return jsonify({'files': files_list})
 
 
 # Принимаем файл 
@@ -122,14 +121,9 @@ def search():
         # https://flask.palletsprojects.com/en/2.2.x/api/
         return send_file(safe_path, as_attachment=True)
     except:
-        return "Файл не найден"
+        return "Файл не найден."
 
 
 if __name__ == ('__main__'):
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=PORT)
 
-
-
-# Если файл существует, то возвращаем его его
-    #if filename in get_list_files(UPLOAD_FOLDER):
-    #return send_from_directory(UPLOAD_FOLDER, filename)
