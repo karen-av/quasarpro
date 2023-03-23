@@ -21,7 +21,7 @@
     python3 script.py create<br>
 <br>
 Получить файл с сервера.<br>
-    curl -OJ http://localhost:5000/files/get/txt/example
+    curl -OJ http://localhost:5000/files/get/txt/example<br>
     python3 script.py search<br>
 
 Удалить с сервера файл exemple.txt<br>
