@@ -57,7 +57,7 @@ class TestClass:
         response = requests.post(f'{HTTP}files/create', files=files)
         assert response.status_code == 200
 
-        # 405 Method Not Allowed
+        # 404 Not Found 
         response = requests.get(f'{HTTP}files/create/')
         assert response.status_code == 404
 
