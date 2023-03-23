@@ -27,6 +27,7 @@
 Удалить с сервера файл exemple.txt<br>
     curl -X DELETE http://localhost:5000/files/delete/example.txt<br>
     python3 script.py delete<br>
-Или просто запустите скрипт и служуйте посдсказкам python3 script.py<br>
+<br>
+Или просто запустите скрипт и следуйте посдсказкам python3 script.py<br>
 Пожалуйста, используйте в названиях файлов буквы латинского алфавита. <br>
 </p>
