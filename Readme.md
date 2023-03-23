@@ -17,7 +17,7 @@
     python3 script.py {extantion}<br>
 <br>
 Загрузить файл на сервер.<br>
-    curl -X POST -F 'file=@/path/to/example.txt' http://localhost:5000/files/create <br>
+    curl -X POST -F 'file=@/path/to/example.txt' http://localhost:5000/files/create/<br>
     python3 script.py create<br>
 <br>
 Получить файл с сервера.<br>

@@ -60,7 +60,7 @@ def comands_handler(input_comand):
             files = {'file': file}
 
             # Передаем созданные словарь с файлом через post запрос
-            response = requests.post(f'{HTTP}files/create', files=files, headers=headers)
+            response = requests.post(f'{HTTP}files/create/', files=files, headers=headers)
             print(response.text)
        
     # Удалить файл

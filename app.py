@@ -55,7 +55,7 @@ def files(extantion):
 
 # Принимает загрузку файла и сохраняет его на сервере, проверяя на наличие 
 # дубликатов.
-@app.route('/files/create', methods=['POST'])
+@app.route('/files/create/', methods=['POST'])
 def create():
     if request.method == 'POST':
         #Принимаем файл из запроса
