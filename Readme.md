@@ -1,9 +1,32 @@
 <p> <h1>Тестовое_задание_Python_(Juniour_Flask) (3)</h1>
-Войдите виртуальное окружение<br>
+Создайте виртуальное окружение и активируйте его.<br>
 Установите все зависимости pip install -r requirements.txt<br>
 
-<h2>Управление из консоли.</h2>
-Запустить сервер командой python3 app.py<br>
-Запустить скрипт командой python3 script.py<br>
-Следовать подскакам в консоли<br>
+<h2></h2>
+Запустите сервер командой python3 app.py<br>
+По умолчанию сервер будет прослушивать порт 5000.<br>
+Изменить порт можно в пакете constants.py.<br>
+
+Сервер может обслужить следующие запросы:<br>
+Вернуть список всеx загруженных файлов в формате JSON.<br>
+    curl -X GET "http://localhost:5000/files/get/list" -o response.json<br>
+    python3 script.py list<br>
+<br>
+Вернуть список всех файлов указанного расширения.<br>
+    curl -X GET "http://localhost:5000/files/get/{extantion}" -o response.json<br>
+    python3 script.py {extantion}<br>
+<br>
+Загрузить файл на сервер.<br>
+    curl -X POST -F 'file=@/path/to/example.txt' http://localhost:5000/files/create <br>
+    python3 script.py create<br>
+<br>
+Получить файл с сервера.<br>
+    curl -OJ http://localhost:5000/files/get/txt/example
+    python3 script.py search<br>
+
+Удалить с сервера файл exemple.txt<br>
+    curl -X DELETE http://localhost:5000/files/delete/example.txt<br>
+    python3 script.py delete<br>
+Или просто запустите скрипт и служуйте посдсказкам python3 script.py<br>
+Пожалуйста, используйте в названиях файлов буквы латинского алфавита. <br>
 </p>
