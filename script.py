@@ -87,8 +87,8 @@ def comands_handler(input_comand):
         # Если нет имени файла или расширения
         if not extantion or not filename_without_extantion:
             print('Файл не найден.')
-            exit()
-        
+            return True
+            
         # get запрос на поиск файла
         response = requests.get(
             f'{HTTP}/files/get/{extantion}/{filename_without_extantion}'
