@@ -1,7 +1,8 @@
 <p> <h3>Тестовое_задание_Python_(Juniour_Flask) (3)</h3>
 Создайте виртуальное окружение и активируйте его.<br>
 Установите все зависимости pip install -r requirements.txt<br>
-<br>
+
+<h2></h2>
 Запустите сервер командой python3 app.py<br>
 По умолчанию сервер будет прослушивать порт 5000.<br>
 Изменить порт можно в пакете constants.py.<br>
@@ -16,7 +17,7 @@
     python3 script.py {extantion}<br>
 <br>
 Загрузить файл на сервер.<br>
-    curl -X POST -H "key_1: value_1" -F 'file=@/Users/MacBookKO/Desktop/example.txt' http://localhost:5000/files/create/<br>
+    curl -X POST -H "key_1: value_1" -F 'file=@/path/to/example.txt' http://localhost:5000/files/create/<br>
     python3 script.py create<br>
 <br>
 Получить файл с сервера.<br>
@@ -27,8 +28,6 @@
     curl -X DELETE http://localhost:5000/files/delete/example.txt<br>
     python3 script.py delete<br>
 <br>
-Или просто запустите скрипт и следуйте подсказкам<br>
-python3 script.py<br>
-<br>
+Или просто запустите скрипт и следуйте посдсказкам python3 script.py<br>
 Пожалуйста, используйте в названиях файлов буквы латинского алфавита. <br>
 </p>
