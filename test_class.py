@@ -20,7 +20,7 @@ class TestClass:
             assert allowed_file('.' + extensions) == True
 
     # Проверка пути files/get/list
-    def test_route_files_list(self):
+    def test_route_files_all(self):
         response = requests.get(f'{HTTP}files/get/list')
         assert response.status_code == 200
 

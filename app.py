@@ -98,8 +98,7 @@ def create():
                 ):
                 # Если находим файл с там же содержиым, то удаляем полученный файл
                 os.remove(safe_join(UPLOAD_FOLDER, filename))
-                return (f"Файл с таким содержимым был загружен ранее. \
-                        Имя файла {file}")
+                return (f"Файл с таким содержимым был загружен ранее. Имя файла {file}")
                 
         return 'Файл успешно загружен.'
 
@@ -143,5 +142,5 @@ def search(extantion, file_name):
             
 
 if __name__ == ('__main__'):
-    app.run(debug=True, host='0.0.0.0', port=PORT)
+    app.run(debug=False, host='0.0.0.0', port=PORT)
 
