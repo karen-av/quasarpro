@@ -52,7 +52,7 @@ def comands_handler(input_comand):
             exit()
 
         # Метаданные
-        headers = {'key_1': 'value_1', 'key_2': 'value_2'}
+        headers = {'key_1': 'value_1'}
 
          #открываем принятый файл
         with open(filename, 'rb') as file:

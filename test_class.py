@@ -52,14 +52,22 @@ class TestClass:
     # Проверка пути /files/create/
     def test_route_create(self):
         files = {
-                'file': ''
-                }
-        response = requests.post(f'{HTTP}files/create', files=files)
+            'file': ''
+            }
+        headers = {
+            'key_1': 'value_1'
+            }
+        response = requests.post(f'{HTTP}files/create', files=files, headers=headers)
         assert response.status_code == 200
 
         # 404 Not Found 
-        response = requests.get(f'{HTTP}files/create/')
+        # Метаданные не прошли проверку
+        response = requests.post(f'{HTTP}files/create/', files=files)
         assert response.status_code == 404
+
+         # 405 Method Not Allowed
+        response = requests.get(f'{HTTP}files/create/')
+        assert response.status_code == 405
 
     # Проверка пути files/delete 
     def test_route_delete(self):

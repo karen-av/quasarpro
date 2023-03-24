@@ -60,6 +60,10 @@ def create():
     if request.method == 'POST':
         #Принимаем файл из запроса
         file = request.files['file']
+        
+        # Проверка метаданных
+        if request.headers.get('key_1') != 'value_1':
+            return "Страница не найдена", 404
 
         # Если файл не загружен
         if file.filename == '':
