@@ -1,8 +1,12 @@
 <p> <h3>Тестовое_задание_Python_(Juniour_Flask) (3)</h3>
 Создайте виртуальное окружение и активируйте его.<br>
 Установите все зависимости pip install -r requirements.txt<br>
+Пакет tkinter - это стандартный интерфейс Python.<br>
+Если он у вас не установлен по какой-то причине, установите его <br>
+sudo apt install python3-tk<br>
+https://docs.python.org/3/library/tkinter.html#module-tkinter<br>
 
-<h2></h2>
+<br>
 Запустите сервер командой python3 app.py<br>
 По умолчанию сервер будет прослушивать порт 5000.<br>
 Изменить порт можно в пакете constants.py.<br>
