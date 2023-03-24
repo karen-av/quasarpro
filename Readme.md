@@ -28,7 +28,7 @@
     curl -X DELETE http://localhost:5000/files/delete/example.txt<br>
     python3 script.py delete<br>
 <br>
-Или просто запустите скрипт и следуйте посдсказкам.<br>
+Или просто запустите скрипт и следуйте подсказкам.<br>
 python3 script.py<br>
 <br>
 Пожалуйста, используйте в названиях файлов буквы латинского алфавита. <br>
