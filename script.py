@@ -6,6 +6,7 @@ from pprint import pprint
 import sys
 import tkinter
 from tkinter.filedialog import askopenfilename
+import os
 
 # Директория для хранения полученных ответов от сервера
 RSESPONSES_DIR = Path.cwd()/"responses" 
@@ -40,17 +41,13 @@ def comands_handler(input_comand):
 
     # Создать файл на серверен файл
     elif input_comand == 'create':
-       # Принмаем файл у пользователя через диалоговое окно 
-        # https://docs.python.org/3/library/tkinter.html#a-hello-world-program
-        widget = tkinter.Tk()    
-        widget.withdraw()
-        filename = askopenfilename()
-        
+        # Принмаем файл у пользователя
+        filename = input("Укажите путь к файлу: ")
         # Проверяем выбрал ли пользователь файл
-        if not filename:
+        if not os.path.isfile(filename):
             print('Файл не выбран.')
             return True
-
+        
         # Метаданные
         headers = {'key_1': 'value_1'}
 
