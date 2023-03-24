@@ -4,8 +4,6 @@ from pathlib import Path
 from constants import ALLOWED_EXTENSIONS, HTTP
 from pprint import pprint
 import sys
-import tkinter
-from tkinter.filedialog import askopenfilename
 import os
 
 # Директория для хранения полученных ответов от сервера
