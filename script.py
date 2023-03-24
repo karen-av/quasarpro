@@ -49,7 +49,7 @@ def comands_handler(input_comand):
         # Проверяем выбрал ли пользователь файл
         if not filename:
             print('Файл не выбран.')
-            exit()
+            return True
 
         # Метаданные
         headers = {'key_1': 'value_1'}
