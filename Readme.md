@@ -24,7 +24,7 @@
     curl -OJ http://localhost:5000/files/get/txt/example<br>
     python3 script.py search<br>
 <br>
-Удалить с сервера файл exemple.txt<br>
+Удалить файл с сервера.<br>
     curl -X DELETE http://localhost:5000/files/delete/example.txt<br>
     python3 script.py delete<br>
 <br>
